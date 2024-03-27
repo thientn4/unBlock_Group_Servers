@@ -6,11 +6,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import jakarta.servlet.Filter;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 @Component
@@ -22,29 +24,40 @@ public class TokenVerifier implements Filter {
         FilterChain chain
     ) throws ServletException, IOException {
         HttpServletRequest req = (HttpServletRequest) request;
-        HeaderMapRequestWrapper requestWrapper = new HeaderMapRequestWrapper(req);
-        String token = requestWrapper.getHeader("token");
-        token="AeyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IlhSdmtvOFA3QTNVYVdTblU3Yk05blQwTWpoQSJ9.eyJhdWQiOiJiMDVhODA1MC03OGE3LTRhNTctYmQ2Mi1mZTI4ZGYyODFjZmQiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vODA2YThkMDAtNDg1ZS00ODQ5LWE1MTgtMzE1NjcwYzRhMTk1L3YyLjAiLCJpYXQiOjE3MTE0OTUzNDQsIm5iZiI6MTcxMTQ5NTM0NCwiZXhwIjoxNzExNDk5MjQ0LCJuYW1lIjoiVGhpZW4gTmd1eWVuIiwibm9uY2UiOiIwOWY2MmE0ZS01MDMxLTRmYzktODFhNi1lMmM2MTAwODkzYzgiLCJvaWQiOiI5ZDc4YzA5MC00NTVmLTRmNTItYjA2Yi1iYzcxNDM4NTRiNWEiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJUaGllbk5ndXllbkBKTUVhZ2xlLmNvbSIsInJoIjoiMC5BVkFBQUkxcWdGNUlTVWlsR0RGV2NNU2hsVkNBV3JDbmVGZEt2V0wtS044b0hQMVFBQ2cuIiwic3ViIjoiX2xFNWl1Qndnell1Q0ZZZkwzZE5XbnFCOWxaVE5OQ0lsUnplV2Y0dk1nRSIsInRpZCI6IjgwNmE4ZDAwLTQ4NWUtNDg0OS1hNTE4LTMxNTY3MGM0YTE5NSIsInV0aSI6InNmWlZkVmpyYUVlcndOTkljam9EQVEiLCJ2ZXIiOiIyLjAifQ.Cp6z7iBz8tSISp8IxrnXGfEVKZ-4PPK6u5pPqlbaqkry57huRv4slTbD96p3UtDmItDrQhKLHoLy6zXm_WhvKrJYV2vmJrPmsVTQCh38geTxIjMWIDbsYD_W8tcQ8xSyoOnqNakjl_9QmQPLOGcpQC1A9XAa7yomTA_LcTmKWcbMYvuTZZ4lsz5bA4ksNpr_PASxmQmzyhXFmjAJ5zXvGjMxyiXDU2wj435bDp_Au8axUwmntF8uTiLStoiQDxpiSNrJ2vfcG82211KLnKnZRMgdlI2QqTvaJ_dmrIrxza6f0SetB8M_HLXx4t0XQGWWGg53KDlGEY_oCn5gNWMpzw";
+        if(!req.getMethod().equals("OPTIONS")) { /// EXCLUDE CORS PREFLIGHT REQUEST
+            HeaderMapRequestWrapper requestWrapper = new HeaderMapRequestWrapper(req);
+            String token = requestWrapper.getHeader("token");
+            //token = "AeyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IkZsR05mUnZHSW82MVJIckFUQmNucUZTb2RpOCJ9.eyJ2ZXIiOiIyLjAiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vOTE4ODA0MGQtNmM2Ny00YzViLWIxMTItMzZhMzA0YjY2ZGFkL3YyLjAiLCJzdWIiOiJBQUFBQUFBQUFBQUFBQUFBQUFBQUFKby1vam94b1BUMHEzRElJeXR4bWYwIiwiYXVkIjoiYjA1YTgwNTAtNzhhNy00YTU3LWJkNjItZmUyOGRmMjgxY2ZkIiwiZXhwIjoxNzExNjY1NzAyLCJpYXQiOjE3MTE1NzkwMDIsIm5iZiI6MTcxMTU3OTAwMiwibmFtZSI6IlRoaWVuIE5ndXllbiIsInByZWZlcnJlZF91c2VybmFtZSI6Im50bXRoaWVuMDFAZ21haWwuY29tIiwib2lkIjoiMDAwMDAwMDAtMDAwMC0wMDAwLTZhZDgtM2U4M2VmYjE0NzAyIiwidGlkIjoiOTE4ODA0MGQtNmM2Ny00YzViLWIxMTItMzZhMzA0YjY2ZGFkIiwibm9uY2UiOiI2MjhlMGEwMi01NzBjLTRkMzQtYjFiYS1kY2I1ZTIxYzlkYTAiLCJhaW8iOiJEcVpyOXlDQUZCOWd3NlVoc1Q5d2JLRFU5RTNzN0J5eFk1REd2YURWeml4dHlENTR2UG1yRzREODVVOWU1V3ZXdW1WQ2l4Nm5oTjNldXhERHUxaUpLNUVVZTVLd2s0U0Q5UXpPNDEqKmZrRFZ4eUhobDZFR2xXNFlrKm85dHZnaTUhb2lZYzNmNVBtT1pRTUFkODR1TVdMV1hlWU5rNExTQzludE1aSjJwd3J5In0.a7kcjp3ZF-7wzW0TS_2IVfkz4PUJ0lcFxWpt441r8M8SgyB_CGLQCLt5EOq54fhsmh3HVgYmN3iEep_WSW2mJ9A6JiCjZIjqEZ-xDDwEqr0Pb7AKK6RaIHJXv4pB_YWkg6Xe002S1qMP2y6H42syhfjOtlcGb2a-Ytg79pwRYpQZRS3sPw7t2DU8QadevxeTmyUjbuHi4M3F19vtYVkoapDSBfwRKacYXFqtsusJfGtJm-vD7jEVMIJ2Aw3Q_pHhVzPl4htqZJBvNwWc5WtpfOtoBj0yKNUhni0wI33rXOqpyI9DN6f26CFtwtPHhoLheWSTwUJR2jYIVNt5vNN_Vw";
+            String[] chunks = token.split("\\.");
+            Base64.Decoder decoder = Base64.getUrlDecoder();
 
-        String[] chunks = token.split("\\.");
-        Base64.Decoder decoder = Base64.getUrlDecoder();
+            byte[] payloadBytes = Base64.getDecoder().decode(chunks[1]);
+            Map<String, Object> payload = (new ObjectMapper()).readValue(new String(payloadBytes), new TypeReference<Map<String, Object>>() {
+            });
+            String email = payload.get("preferred_username").toString().toLowerCase();
+            requestWrapper.addHeader("email", email);
+            String appId = payload.get("aud").toString();
+            long issuedAt = ((Integer) payload.get("iat")).longValue();
+            long now = System.currentTimeMillis() / 1000L;
+            //(now - issuedAt) should be less than (24*60*60)
+            if (
+                    (now - issuedAt) > 24 * 60 * 60 || !appId.equals("b05a8050-78a7-4a57-bd62-fe28df281cfd")
+            ) {
+                HttpServletResponse httpResponse = (HttpServletResponse) response;
+                httpResponse.setContentType("text/plain");
+                httpResponse.getWriter().print("invalid token");
+                httpResponse.setStatus(200);
+                httpResponse.setHeader("Access-Control-Allow-Origin", "*");
+                httpResponse.setHeader("Access-Control-Allow-Methods", "*");
+                httpResponse.setHeader("Access-Control-Max-Age", "3600");
+                httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
+                httpResponse.setHeader("Access-Control-Allow-Headers", "*");
+                return; // Reject the request here
+            }
+            chain.doFilter(requestWrapper, response);
+        }
+        chain.doFilter(request, response);
 
-        byte[] payloadBytes = Base64.getDecoder().decode(chunks[1]);
-        Map<String, Object> payload = (new ObjectMapper()).readValue(new String(payloadBytes), new TypeReference<Map<String, Object>>() {});
-        long issuedAt = ((Integer) payload.get("iat")).longValue();
-        System.out.println(issuedAt);
-        long now = System.currentTimeMillis() / 1000L;
-        System.out.println(now);
-        //(now - issuedAt) should be less than (24*60*60)
-        String email = payload.get("preferred_username").toString().toLowerCase();
-
-        byte[] headerBytes = Base64.getDecoder().decode(chunks[0]);
-        //String header = new String(decoder.decode(chunks[0]));
-        //String payload = Arrays.toString(decoder.decode(chunks[1]));
-
-        requestWrapper.addHeader("email", email);
-
-        chain.doFilter(requestWrapper, response);
     }
 
     public static class HeaderMapRequestWrapper extends HttpServletRequestWrapper {
