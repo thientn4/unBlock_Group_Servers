@@ -12,7 +12,6 @@ import jakarta.servlet.Filter;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.*;
 
 @Component
@@ -40,6 +39,7 @@ public class TokenVerifier implements Filter {
             httpResponse.setContentType("text/plain");
             httpResponse.getWriter().print("invalid token");
             httpResponse.setStatus(200);
+            ///// MUST SET HEADER PARAMS FOR CORS
             httpResponse.setHeader("Access-Control-Allow-Origin", "*");
             httpResponse.setHeader("Access-Control-Allow-Methods", "*");
             httpResponse.setHeader("Access-Control-Max-Age", "3600");
