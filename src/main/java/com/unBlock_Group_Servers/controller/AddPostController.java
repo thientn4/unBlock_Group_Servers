@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController //--------------> Marks a class as a controller that handles REST API requests
 public class AddPostController {
-    @GetMapping("/add/post") //--------------> Maps a method in a Spring controller to handle HTTP GET requests made to a path
+    @PostMapping("/add/post") //--------------> Maps a method in a Spring controller to handle HTTP GET requests made to a path
     public ResponseEntity<String> home(
             @RequestHeader(name = "email",required = true) String email
     ){
