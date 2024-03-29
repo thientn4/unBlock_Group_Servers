@@ -36,9 +36,48 @@ public class Query {
                         row.getString("CONTENT"),
                         row.getBoolean("IS_PRIVATE"),
                         row.getBoolean("HIGHLIGHT"),
-                        row.getTimestamp("DATETIME")
+                        row.getTimestamp("TIME_STAMP")
                 )
         );
         return results;
+    }
+
+    public int addPost(
+            String groupId,
+            String opEmail,
+            int commentTo,
+            int replyTo,
+            String title,
+            String content,
+            boolean isPrivate,
+            boolean highlight
+    ){
+        List<Integer>results=this.sql.query(
+                "CALL UNBLOCK.ADD_POST(:groupId,:opEmail,:commentTo,:replyTo,:title,:content,:isPrivate,:highlight)",
+                new MapSqlParameterSource()
+                        .addValue("groupId", groupId, Types.VARCHAR)
+                        .addValue("opEmail", opEmail, Types.VARCHAR)
+                        .addValue("commentTo", commentTo!=-1?commentTo:null, Types.INTEGER)
+                        .addValue("replyTo", replyTo!=-1?replyTo:null, Types.INTEGER)
+                        .addValue("title", title, Types.VARCHAR)
+                        .addValue("content", content, Types.VARCHAR)
+                        .addValue("isPrivate", isPrivate, Types.BOOLEAN)
+                        .addValue("highlight", highlight, Types.BOOLEAN),
+                (row,rowNum)-> row.getInt("ID")
+        );
+        return results.get(0);
+    }
+
+
+    public int addPostTag(
+            int postId,
+            String tag
+    ){
+        return sql.update(
+                "CALL UNBLOCK.ADD_POST_TAG(:tag,:postId)",
+                new MapSqlParameterSource()
+                        .addValue("tag", tag, Types.VARCHAR)
+                        .addValue("postId", postId, Types.INTEGER)
+        );
     }
 }

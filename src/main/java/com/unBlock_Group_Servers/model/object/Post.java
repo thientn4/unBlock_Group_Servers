@@ -75,12 +75,12 @@ public class Post {
         this.highlight = highlight;
     }
 
-    public Timestamp getDatetime() {
-        return datetime;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
-    public void setDatetime(Timestamp datetime) {
-        this.datetime = datetime;
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
     public Post(int id, String groupId, String opEmail, int commentTo, int replyTo, String title, String content, Boolean isPrivate, Boolean highlight, Timestamp datetime) {
@@ -93,7 +93,7 @@ public class Post {
         this.content = content;
         this.isPrivate = isPrivate;
         this.highlight = highlight;
-        this.datetime = datetime;
+        this.timestamp = datetime;
     }
 
     private int id;
@@ -105,6 +105,6 @@ public class Post {
     private String content;
     private Boolean isPrivate;
     private Boolean highlight;
-    private Timestamp datetime;
+    private Timestamp timestamp;
 
 }
