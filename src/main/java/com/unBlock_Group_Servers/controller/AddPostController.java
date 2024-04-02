@@ -26,8 +26,8 @@ public class AddPostController {
         int id = query.addPost(
                 body.getGroupId(),
                 email,
-                -1,
-                -1,
+                body.getCommentTo(),
+                body.getReplyTo(),
                 body.getTitle(),
                 body.getContent(),
                 body.getPrivate(),

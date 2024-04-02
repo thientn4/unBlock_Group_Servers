@@ -9,19 +9,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController //--------------> Marks a class as a controller that handles REST API requests
-public class GetPostsController {
+public class GetRepliesController {
 
     @Autowired //--------------------> automates dependency (bean) injection
     private Query query;
-    @GetMapping("/get/posts") //--------------> Maps a method in a Spring controller to handle HTTP GET requests made to a path
+    @GetMapping("/get/replies") //--------------> Maps a method in a Spring controller to handle HTTP GET requests made to a path
     public ResponseEntity<GetPostsResponse> home(
-            @RequestParam(name = "groupId",required = true) String groupId
+            @RequestParam(name = "postId",required = true) String postId
     ){
         try {
             return ResponseEntity.status(200).body(new GetPostsResponse(
                     "success",
-                    this.query.getGroupTags(groupId),
-                    this.query.getGroupPosts(groupId)
+                    this.query.getPostTags(postId),
+                    this.query.getReplies(postId)
             ));
         }catch(Exception e){
             System.out.println(e.toString());

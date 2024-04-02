@@ -14,6 +14,33 @@ public class Query {
     @Autowired //--------------------> automates dependency (bean) injection
     private NamedParameterJdbcTemplate sql;
 
+    public List<String> getPostTags(String postId){
+        List<String>results=this.sql.query(
+                "CALL UNBLOCK.GET_POST_TAGS(:postId)",
+                new MapSqlParameterSource().addValue("postId", postId, Types.INTEGER),
+                (row,rowNum)-> row.getString("TAG")
+        );
+        return results;
+    }
+    public List<Post> getReplies(String postId){
+        List<Post>results=this.sql.query(
+                "CALL UNBLOCK.GET_REPLIES(:postId)",
+                new MapSqlParameterSource().addValue("postId", postId, Types.INTEGER),
+                (row,rowNum)-> new Post(
+                        row.getInt("ID"),
+                        row.getString("GROUP_ID"),
+                        row.getString("OP_EMAIL"),
+                        row.getInt("COMMENT_TO"),
+                        row.getInt("REPLY_TO"),
+                        row.getString("TITLE"),
+                        row.getString("CONTENT"),
+                        row.getBoolean("IS_PRIVATE"),
+                        row.getBoolean("HIGHLIGHT"),
+                        row.getTimestamp("TIME_STAMP")
+                )
+        );
+        return results;
+    }
     public List<String> getGroupTags(String groupId){
         List<String>results=this.sql.query(
                 "CALL UNBLOCK.GET_GROUP_TAGS(:groupId)",
