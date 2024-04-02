@@ -107,4 +107,28 @@ public class Query {
                         .addValue("postId", postId, Types.INTEGER)
         );
     }
+
+    public int deletePost(
+            int postId,
+            String email
+    ){
+        return sql.update(
+                "CALL UNBLOCK.DELETE_POST(:email,:postId)",
+                new MapSqlParameterSource()
+                        .addValue("email", email, Types.VARCHAR)
+                        .addValue("postId", postId, Types.INTEGER)
+        );
+    }
+
+    public int highlightPost(
+            int postId,
+            boolean highlight
+    ){
+        return sql.update(
+                "CALL UNBLOCK.HIGHLIGHT_POST(:highlight,:postId)",
+                new MapSqlParameterSource()
+                        .addValue("highlight", highlight, Types.BOOLEAN)
+                        .addValue("postId", postId, Types.INTEGER)
+        );
+    }
 }
