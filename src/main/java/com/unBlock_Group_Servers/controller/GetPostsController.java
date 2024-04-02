@@ -15,7 +15,7 @@ public class GetPostsController {
     private Query query;
     @GetMapping("/get/posts") //--------------> Maps a method in a Spring controller to handle HTTP GET requests made to a path
     public ResponseEntity<GetPostsResponse> home(
-            @RequestParam(name = "groupId",required = true) String groupId
+            @RequestParam(name = "groupId",required = true) int groupId
     ){
         try {
             return ResponseEntity.status(200).body(new GetPostsResponse(

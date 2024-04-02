@@ -28,7 +28,7 @@ public class Query {
                 new MapSqlParameterSource().addValue("postId", postId, Types.INTEGER),
                 (row,rowNum)-> new Post(
                         row.getInt("ID"),
-                        row.getString("GROUP_ID"),
+                        row.getInt("GROUP_ID"),
                         row.getString("OP_EMAIL"),
                         row.getInt("COMMENT_TO"),
                         row.getInt("REPLY_TO"),
@@ -41,21 +41,21 @@ public class Query {
         );
         return results;
     }
-    public List<String> getGroupTags(String groupId){
+    public List<String> getGroupTags(int groupId){
         List<String>results=this.sql.query(
                 "CALL UNBLOCK.GET_GROUP_TAGS(:groupId)",
-                new MapSqlParameterSource().addValue("groupId", groupId, Types.VARCHAR),
+                new MapSqlParameterSource().addValue("groupId", groupId, Types.INTEGER),
                 (row,rowNum)-> row.getString("TAG")
         );
         return results;
     }
-    public List<Post> getGroupPosts(String groupId){
+    public List<Post> getGroupPosts(int groupId){
         List<Post>results=this.sql.query(
                 "CALL UNBLOCK.GET_GROUP_POSTS(:groupId)",
-                new MapSqlParameterSource().addValue("groupId", groupId, Types.VARCHAR),
+                new MapSqlParameterSource().addValue("groupId", groupId, Types.INTEGER),
                 (row,rowNum)-> new Post(
                         row.getInt("ID"),
-                        row.getString("GROUP_ID"),
+                        row.getInt("GROUP_ID"),
                         row.getString("OP_EMAIL"),
                         row.getInt("COMMENT_TO"),
                         row.getInt("REPLY_TO"),
@@ -70,7 +70,7 @@ public class Query {
     }
 
     public int addPost(
-            String groupId,
+            int groupId,
             String opEmail,
             int commentTo,
             int replyTo,
@@ -82,7 +82,7 @@ public class Query {
         List<Integer>results=this.sql.query(
                 "CALL UNBLOCK.ADD_POST(:groupId,:opEmail,:commentTo,:replyTo,:title,:content,:isPrivate,:highlight)",
                 new MapSqlParameterSource()
-                        .addValue("groupId", groupId, Types.VARCHAR)
+                        .addValue("groupId", groupId, Types.INTEGER)
                         .addValue("opEmail", opEmail, Types.VARCHAR)
                         .addValue("commentTo", commentTo!=-1?commentTo:null, Types.INTEGER)
                         .addValue("replyTo", replyTo!=-1?replyTo:null, Types.INTEGER)

@@ -3,7 +3,7 @@ package com.unBlock_Group_Servers.model.request;
 import java.util.List;
 
 public class AddPostRequest {
-    public AddPostRequest(String groupId, String opEmail, int commentTo, int replyTo, String title, String content, Boolean isPrivate, Boolean isHighlight, List<String> tags) {
+    public AddPostRequest(int groupId, String opEmail, int commentTo, int replyTo, String title, String content, Boolean isPrivate, Boolean isHighlight, List<String> tags) {
         this.groupId = groupId;
         this.opEmail = opEmail;
         this.commentTo = commentTo;
@@ -15,11 +15,11 @@ public class AddPostRequest {
         this.tags = tags;
     }
 
-    public String getGroupId() {
+    public int getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(String groupId) {
+    public void setGroupId(int groupId) {
         this.groupId = groupId;
     }
 
@@ -87,7 +87,7 @@ public class AddPostRequest {
         this.tags = tags;
     }
 
-    private String groupId;
+    private int groupId;
     private String opEmail;
     private int commentTo;
     private int replyTo;

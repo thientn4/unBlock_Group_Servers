@@ -11,11 +11,11 @@ public class Post {
         this.id = id;
     }
 
-    public String getGroupId() {
+    public int getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(String groupId) {
+    public void setGroupId(int groupId) {
         this.groupId = groupId;
     }
 
@@ -83,7 +83,7 @@ public class Post {
         this.timestamp = timestamp;
     }
 
-    public Post(int id, String groupId, String opEmail, int commentTo, int replyTo, String title, String content, Boolean isPrivate, Boolean highlight, Timestamp datetime) {
+    public Post(int id, int groupId, String opEmail, int commentTo, int replyTo, String title, String content, Boolean isPrivate, Boolean highlight, Timestamp datetime) {
         this.id = id;
         this.groupId = groupId;
         this.opEmail = opEmail;
@@ -97,7 +97,7 @@ public class Post {
     }
 
     private int id;
-    private String groupId;
+    private int groupId;
     private String opEmail;
     private int commentTo;
     private int replyTo;
