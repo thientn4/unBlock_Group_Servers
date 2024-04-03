@@ -95,6 +95,22 @@ public class Query {
         return results.get(0);
     }
 
+    public int editPost(
+            int postId,
+            String title,
+            String content,
+            boolean isPrivate
+    ){
+        return sql.update(
+                "CALL UNBLOCK.EDIT_POST(:postId,:title,:content,:isPrivate)",
+                new MapSqlParameterSource()
+                        .addValue("postId", postId, Types.INTEGER)
+                        .addValue("title", title, Types.VARCHAR)
+                        .addValue("content", content, Types.VARCHAR)
+                        .addValue("isPrivate", isPrivate, Types.BOOLEAN)
+        );
+    }
+
 
     public int addPostTag(
             int postId,
