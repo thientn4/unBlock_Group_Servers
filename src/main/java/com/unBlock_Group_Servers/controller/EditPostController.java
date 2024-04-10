@@ -13,6 +13,7 @@ public class EditPostController {
     private Query query;
     @PostMapping("/edit/post") //--------------> Maps a method in a Spring controller to handle HTTP GET requests made to a path
     public ResponseEntity<String> home(
+            @RequestHeader(name = "email",required = true) String email,
             @RequestParam(name = "postId",required = true) int postId,
             @RequestBody AddPostRequest body //----------> must use conversion from JSON object to Java object
     ){
@@ -20,12 +21,14 @@ public class EditPostController {
          * TEST URL:
          * http://localhost:8080
          * */
-        query.editPost(
+        int affectedRows = query.editPost(
                 postId,
                 body.getTitle(),
                 body.getContent(),
-                body.getPrivate()
+                body.getPrivate(),
+                email
         );
+        if(affectedRows<=0)return ResponseEntity.status(200).body("failed");
         System.out.println("start add tags "+body.getTags().size());
         for (String tag : body.getTags()) {
             if(query.addPostTag(postId,tag)!=0)System.out.println(tag+" success");
