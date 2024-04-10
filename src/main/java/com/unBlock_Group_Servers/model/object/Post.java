@@ -83,7 +83,15 @@ public class Post {
         this.timestamp = timestamp;
     }
 
-    public Post(int id, int groupId, String opEmail, int commentTo, int replyTo, String title, String content, Boolean isPrivate, Boolean highlight, Timestamp datetime) {
+    public Timestamp getEditTimestamp() {
+        return editTimestamp;
+    }
+
+    public void setEditTimestamp(Timestamp timestamp) {
+        this.editTimestamp = timestamp;
+    }
+
+    public Post(int id, int groupId, String opEmail, int commentTo, int replyTo, String title, String content, Boolean isPrivate, Boolean highlight, Timestamp datetime, Timestamp editDatetime) {
         this.id = id;
         this.groupId = groupId;
         this.opEmail = opEmail;
@@ -94,6 +102,7 @@ public class Post {
         this.isPrivate = isPrivate;
         this.highlight = highlight;
         this.timestamp = datetime;
+        this.editTimestamp = editDatetime;
     }
 
     private int id;
@@ -106,5 +115,6 @@ public class Post {
     private Boolean isPrivate;
     private Boolean highlight;
     private Timestamp timestamp;
+    private Timestamp editTimestamp;
 
 }
