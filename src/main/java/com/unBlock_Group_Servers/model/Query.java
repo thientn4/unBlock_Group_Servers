@@ -37,7 +37,8 @@ public class Query {
                         row.getBoolean("IS_PRIVATE"),
                         row.getBoolean("HIGHLIGHT"),
                         row.getTimestamp("TIME_STAMP"),
-                        row.getTimestamp("EDIT_TIME_STAMP")
+                        row.getTimestamp("EDIT_TIME_STAMP"),
+                        null
                 )
         );
         return results;
@@ -65,7 +66,8 @@ public class Query {
                         row.getBoolean("IS_PRIVATE"),
                         row.getBoolean("HIGHLIGHT"),
                         row.getTimestamp("TIME_STAMP"),
-                        row.getTimestamp("EDIT_TIME_STAMP")
+                        row.getTimestamp("EDIT_TIME_STAMP"),
+                        row.getString("TAGS")
                 )
         );
         return results;

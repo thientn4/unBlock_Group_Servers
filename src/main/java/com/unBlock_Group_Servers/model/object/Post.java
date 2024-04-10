@@ -1,5 +1,6 @@
 package com.unBlock_Group_Servers.model.object;
 
+import java.sql.Array;
 import java.sql.Timestamp;
 
 public class Post {
@@ -91,7 +92,15 @@ public class Post {
         this.editTimestamp = timestamp;
     }
 
-    public Post(int id, int groupId, String opEmail, int commentTo, int replyTo, String title, String content, Boolean isPrivate, Boolean highlight, Timestamp datetime, Timestamp editDatetime) {
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    public Post(int id, int groupId, String opEmail, int commentTo, int replyTo, String title, String content, Boolean isPrivate, Boolean highlight, Timestamp datetime, Timestamp editDatetime, String tags) {
         this.id = id;
         this.groupId = groupId;
         this.opEmail = opEmail;
@@ -103,6 +112,7 @@ public class Post {
         this.highlight = highlight;
         this.timestamp = datetime;
         this.editTimestamp = editDatetime;
+        this.tags = tags;
     }
 
     private int id;
@@ -116,5 +126,7 @@ public class Post {
     private Boolean highlight;
     private Timestamp timestamp;
     private Timestamp editTimestamp;
+
+    private String tags;
 
 }
