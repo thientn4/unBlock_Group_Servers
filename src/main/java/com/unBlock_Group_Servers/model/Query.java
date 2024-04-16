@@ -104,15 +104,17 @@ public class Query {
             String title,
             String content,
             boolean isPrivate,
+            boolean isHighlight,
             String email
     ){
         return sql.update(
-                "CALL UNBLOCK.EDIT_POST(:postId,:title,:content,:isPrivate,:email)",
+                "CALL UNBLOCK.EDIT_POST(:postId,:title,:content,:isPrivate,:highlight,:email)",
                 new MapSqlParameterSource()
                         .addValue("postId", postId, Types.INTEGER)
                         .addValue("title", title, Types.VARCHAR)
                         .addValue("content", content, Types.VARCHAR)
                         .addValue("isPrivate", isPrivate, Types.BOOLEAN)
+                        .addValue("highlight", isHighlight, Types.BOOLEAN)
                         .addValue("email", email, Types.VARCHAR)
         );
     }

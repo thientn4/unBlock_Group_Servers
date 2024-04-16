@@ -26,6 +26,7 @@ public class EditPostController {
                 body.getTitle(),
                 body.getContent(), // replace temporary links to images from CKEditor with our uploaded links
                 body.getPrivate(),
+                body.getHighlight(),
                 email
         );
         if(affectedRows<=0)return ResponseEntity.status(200).body("failed");
