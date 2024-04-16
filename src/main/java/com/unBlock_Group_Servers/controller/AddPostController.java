@@ -29,7 +29,7 @@ public class AddPostController {
                 body.getCommentTo(),
                 body.getReplyTo(),
                 body.getTitle(),
-                body.getContent(),
+                body.getContent(), // replace temporary links to images from CKEditor with our uploaded links
                 body.getPrivate(),
                 body.getHighlight()
         );

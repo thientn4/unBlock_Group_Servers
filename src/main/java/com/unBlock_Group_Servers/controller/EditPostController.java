@@ -24,7 +24,7 @@ public class EditPostController {
         int affectedRows = query.editPost(
                 postId,
                 body.getTitle(),
-                body.getContent(),
+                body.getContent(), // replace temporary links to images from CKEditor with our uploaded links
                 body.getPrivate(),
                 email
         );
